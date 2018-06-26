@@ -17,11 +17,11 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"log"
-	"net/http"
-	"encoding/json"
+	// "log"
+	// "net/http"
+	// "encoding/json"
 
-	homedir "github.com/mitchellh/go-homedir"
+	// homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -40,24 +40,25 @@ var cfgFile string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "save_import",
+	Use:   "cli_test",
 	Short: "This is a simple cli application to save files in data",
-	Long: `This cli tool will receive file paths and save the files in database
-  			 It will be compatible for initially relational databases like sqlite,
-				 postgres, mysql. For example:
-
-					Cobra is a CLI library for Go that empowers applications.
-					This application is a tool to generate the needed files
-					to quickly create a Cobra application.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
-	//	Run: func(cmd *cobra.Command, args []string) { },
+	Run: func(cmd *cobra.Command, args []string) {
+		//fmt.Printf("Inside rootCmd Run with args: %v\n", args)
+		fmt.Println(viper.Get("url"))
+		/*if err := cmd.ParseFlags(args); err != nil {
+					 log.Printf("err: %v", err)
+			 }
+	  fmt.Println(cmd.Flags)*/
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
-	url := fmt.Sprintf("http://localhost:8000/list")
+	// fmt.Println("hello world")
+	/*url := fmt.Sprintf("http://localhost:8000/list")
 	// Build the request
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -92,7 +93,7 @@ func Execute() {
 	if err := json.NewDecoder(resp.Body).Decode(&record); err != nil {
 		log.Println(err)
 	}
-	fmt.Println(record.Stuff)
+	fmt.Println(record.Stuff)*/
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
@@ -101,7 +102,13 @@ func Execute() {
 }
 
 func init() {
-	cobra.OnInitialize(initConfig)
+	rootCmd.PersistentFlags().StringP("url", "u", "", "Sync Gateway URL")
+  rootCmd.MarkPersistentFlagRequired("url")
+	viper.BindPFlag("url", rootCmd.PersistentFlags().Lookup("url"))
+
+    //this returns nil, since RootCmd hasn't Execute() yet
+
+	/*cobra.OnInitialize(initConfig)
 
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
@@ -110,12 +117,12 @@ func init() {
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")*/
 }
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
-	if cfgFile != "" {
+	/*if cfgFile != "" {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
 	} else {
@@ -136,5 +143,5 @@ func initConfig() {
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
-	}
+	}*/
 }

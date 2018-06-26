@@ -14,7 +14,7 @@
 
 package main
 
-import "github.com/lunaimaginea/example/src/cli_test/cmd"
+import "github.com/lunaimaginea/cli_test/cmd"
 
 func main() {
 	cmd.Execute()
